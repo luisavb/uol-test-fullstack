@@ -1,0 +1,24 @@
+version: '3'
+#Services para definir os contêineres e seus nomes
+services:
+  backend:
+      container_name: backend
+      build:
+        context: ./backend
+        dockerfile: Dockerfile
+      ports:
+        - "3000:3000" #Aqui ja pode perceber que eu não estou expondo a porta para comunicar externamente, na minha String de integração do front colocaria "<http://backend:3001>"
+      networks:
+        - application #Note que aqui tenho duas networks, uma forma de boa pratica onde criei uma rede para comunica back e front e outra para back e db
+  frontend:
+    container_name: frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001" #Aqui neste estou especificando que quero me comunicar externamnete no container, então poderei acessar a aplicação via localhost:3000
+    networks:
+      - application #Aqui é onde eu crio minha rede equivale há "docker netowrk create application"
+networks: #E aqui é onde espeicifco qual tipo de rede meu docker irá criar
+  application: 
+    driver: bridge
